@@ -19,8 +19,12 @@ ENV RDURL="http://host.docker.internal:8000" \
     RDTAR="IBM-MQC-Redist-LinuxX64.tar.gz" \
     VRMF=9.2.5.0
 
-RUN mkdir -p /opt/mqm && cd /opt/mqm \
- && curl -LO "$RDURL/$VRMF-$RDTAR" \
+ENV LOCALLIB="mqlib/9.2.5.0-IBM-MQC-Redist-LinuxX64.tar.gz"
+
+RUN mkdir -p /opt/mqm && chmod a+rx /opt/mqm
+COPY "$LOCALLIB" /opt/mqm
+
+RUN cd /opt/mqm \
  && tar -zxf ./*.tar.gz \
  && rm -f ./*.tar.gz
 

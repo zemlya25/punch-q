@@ -14,18 +14,23 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     build-essential \
   && rm -rf /var/lib/apt/lists/*
 
-ENV RDURL="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/messaging/mqdev/redist" \
-    RDTAR="IBM-MQC-Redist-LinuxX64.tar.gz" \
-    VRMF=9.2.5.0
+# ENV RDURL="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/messaging/mqdev/redist" \
+#     RDTAR="IBM-MQC-Redist-LinuxX64.tar.gz" \
+#     VRMF=9.2.5.0
 
-RUN mkdir -p /opt/mqm && cd /opt/mqm \
- && curl -LO "$RDURL/$VRMF-$RDTAR" \
+ENV LOCALLIB="mqlib/9.2.5.0-IBM-MQC-Redist-LinuxX64.tar.gz"
+
+RUN mkdir -p /opt/mqm && chmod a+rx /opt/mqm
+COPY "$LOCALLIB" /opt/mqm
+
+RUN cd /opt/mqm \
  && tar -zxf ./*.tar.gz \
  && rm -f ./*.tar.gz
 
+# change repo to freeze lib/code version
 RUN mkdir /src \
     && cd /src \
-    && git clone https://github.com/sensepost/punch-q.git
+    && git clone https://github.com/zemlya25/punch-q.git
 
 WORKDIR /src/punch-q
 RUN mkdir wheels \
