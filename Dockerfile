@@ -1,4 +1,4 @@
-FROM ubuntu:20.04 as build
+FROM ubuntu:22.04 as build
 
 RUN export DEBIAN_FRONTEND=noninteractive \
   && apt-get update \
